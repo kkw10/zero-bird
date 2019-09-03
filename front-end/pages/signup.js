@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import useInput from '../hooks/useInput';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
@@ -13,7 +13,7 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [termError, setTermError] = useState(false);
 
-    const onSubmit = (e) => {
+    const onSubmit = useCallback((e) => {
         e.preventDefault()
 
         if(password !== passwordCheck) {
@@ -31,34 +31,21 @@ const Signup = () => {
             passwordCheck,
             term
         })
-    };
-    // const onChangeId = (e) => {
-    //     setId(e.target.value)
-    // };
-    // const onChangeNick = (e) => {
-    //     setNick(e.target.value)
-    // };
-    // const onChangePass = (e) => {
-    //     setPassword(e.target.value)
-    // };
-    const onChangePassChk = (e) => {
+    }, [password, passwordCheck, term]);
+
+    const onChangePassChk = useCallback((e) => {
         setPasswordError(e.target.value !== password)
         setPasswordCheck(e.target.value)
-    };
-    const onChangeTerm = (e) => {
+    }, [password]);
+
+    const onChangeTerm = useCallback((e) => {
         setTermError(false);
         setTerm(e.target.checked)
-    };
+    }, []);
 
     return (
-        <>
-            <Head>
-                <title>Zero bird</title>
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.22.2/antd.min.css"/>
-            </Head>        
-            <AppLayout>
-                <div>Signup</div>            
-            </AppLayout>    
+        <>      
+            <div>Signup</div>                     
             <Form onSubmit={onSubmit} style={{ padding: 15 }}>
                 <div>
                     <label htmlFor="user-id">아이디</label>

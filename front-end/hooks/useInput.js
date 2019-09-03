@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, { useState, useCallback } from 'react'
 
 const useInput = (inputValue) => {
     const [value, setter] = useState(inputValue);
 
-    const handler = (e) => {
+    const handler = useCallback((e) => {
         setter(e.target.value);
-    };
+    }, []);
 
     return [value, handler]
 }
