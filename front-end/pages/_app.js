@@ -1,5 +1,6 @@
 // next.js에서 사용하는 layout 전용 컴포넌트
 import React from 'react';
+import PropTypes from 'prop-types';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
 
@@ -15,6 +16,10 @@ const ZeroBird = ({ Component }) => {
             </AppLayout>                    
         </>
     )
+}
+
+ZeroBird.propTypes = {
+    Component: PropTypes.elementType
 }
 
 export default ZeroBird;
