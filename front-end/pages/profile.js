@@ -1,20 +1,19 @@
 import React from 'react';
-import Link from 'next/link';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
 
-const Home = () => {
+const Profile = () => {
     return (
         <>
             <Head>
                 <title>Zero bird</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.22.2/antd.min.css"/>
-            </Head>
+            </Head>        
             <AppLayout>
-                <div>Hello, Next!</div>                                    
+                <div>Profile</div>
             </AppLayout>        
         </>
     )
 } 
 
-export default Home
+export default Profile
