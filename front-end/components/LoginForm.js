@@ -14,7 +14,7 @@ const LoginForm = () => {
     }, [])
 
     return (
-        <Form onSubmit={onSubmitForm}>
+        <Form onSubmit={onSubmitForm} style={{ padding: 10 }}>
             <div>
                 <label htmlFor="user-id">아이디</label>
                 <br/>
