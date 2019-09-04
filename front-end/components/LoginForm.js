@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import useInput from "../hooks/useInput";
 import Link from 'next/link';
-import { Menu, Input, Button, Form } from 'antd';
+import { Input, Button, Form } from 'antd';
 
 const LoginForm = () => {
     const [id, onChangeId] = useInput('');
