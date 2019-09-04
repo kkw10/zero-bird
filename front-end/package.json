@@ -13,8 +13,11 @@
   "dependencies": {
     "antd": "^3.22.2",
     "next": "^9.0.5",
+    "next-redux-wrapper": "^3.0.0",
     "react": "^16.9.0",
-    "react-dom": "^16.9.0"
+    "react-dom": "^16.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
