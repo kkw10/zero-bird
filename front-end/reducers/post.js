@@ -1,14 +1,22 @@
 export const initialState = {
-    mainPosts: []
+    mainPosts: [{
+        User: {
+            id: 1,
+            nickname: 'Koon',
+        },
+        content: 'golang을 배워봅시다!!!',
+        img: 'https://miro.medium.com/max/3000/1*30aoNxlSnaYrLhBT0O1lzw.png'
+    }],
+    imagePath: []
 }
 
 export const ADD_POST = "ADD_POST";
 export const ADD_DUMMY = "ADD_DUMMY";
 
-const addPost = {
+export const addPost = {
     type: ADD_POST,
 }
-const addDummy = {
+export const addDummy = {
     type: ADD_DUMMY,
     data: {
         content: 'Hello',
