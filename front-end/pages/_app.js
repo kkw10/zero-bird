@@ -6,7 +6,9 @@ import AppLayout from '../components/AppLayout';
 import widthRedux from 'next-redux-wrapper';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
-import reducer from '../reducers'
+import reducer from '../reducers';
+import sagaMiddleware from '../sagas/middleware';
+import rootSaga from '../sagas';
 
 const ZeroBird = ({ Component, store }) => {
     return (
@@ -28,13 +30,19 @@ ZeroBird.propTypes = {
 }
 
 export default widthRedux((initialState, options) => {
-    const middlewares = [];
-    const enhancer = compose(
+    const middlewares = [sagaMiddleware];
+    const enhancer = process.env.NODE_ENV === 'production' 
+    ? compose(
+        applyMiddleware(...middlewares)
+    )
+    : compose(
         applyMiddleware(...middlewares),
         !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
             ? window.__REDUX_DEVTOOLS_EXTENSION__()
-            : (f) => f,
+            : (f) => f,        
     )
+
     const store = createStore(reducer, initialState, enhancer);
+    sagaMiddleware.run(rootSaga);
     return store;
 })(ZeroBird);
