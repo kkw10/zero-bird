@@ -1,16 +1,18 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutAction } from '../reducers/user';
+import { LOG_OUT_REQUEST } from '../reducers/user';
 
 const UserProfile = () => {
-    const nickname = useSelector(state => state.user.user.nickname)
-    const Post = useSelector(state => state.user.user.post)
-    const Followings = useSelector(state => state.user.user.followings)
-    const Followers = useSelector(state => state.user.user.followers) 
+    const nickname = useSelector(state => state.user.me.nickname)
+    const Post = useSelector(state => state.user.me.post)
+    const Followings = useSelector(state => state.user.me.followings)
+    const Followers = useSelector(state => state.user.me.followers) 
     const dispatch = useDispatch();
     const onLogout = useCallback(() => {
-        dispatch(logoutAction)
+        dispatch({
+            type: LOG_OUT_REQUEST
+        })
     }, [])
 
     return (

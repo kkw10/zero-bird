@@ -57,7 +57,7 @@ export const REMOVE_POSTS_SUCCESS = "REMOVE_POSTS_SUCCESS";
 export const REMOVE_POSTS_FAILURE = "REMOVE_POSTS_FAILURE";
 
 export const addPost = {
-    type: ADD_POST,
+    type: ADD_POST_REQUEST,
 }
 export const addDummy = {
     type: ADD_DUMMY,

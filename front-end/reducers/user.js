@@ -59,48 +59,31 @@ export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 // (RFS시리즈가 아닌 경우에는 "동기 요청"이므로 리덕스만 사용해도 된다.)
 
-
-// Action
-export const loginAction = {
-    type: LOG_IN_REQUEST,
-    data: {
-        nickname: 'Koon'
-    }
-}
-export const logoutAction = {
-    type: LOG_OUT_REQUEST
-}
-export const signUpAction = (data) => {
-    return {
-        type: SIGN_UP_REQUEST,
-        data       
-    }
-}
-
 // Reducer
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case LOG_IN_REQUEST: {
             return {
                 ...state,
-                loginData: action.data,
-                isLoading: true,
+                isLoggingIn: true,
+                logInErrorReason: ''
             }
         }
-
         case LOG_IN_SUCCESS: {
             return {
                 ...state,
+                isLoggingIn: false,
                 isLoggedIn: true,
-                user: dummyUser,                
+                me: dummyUser,                
                 isLoading: false,
             }
         }
-
         case LOG_IN_FAILURE: {
             return {
                 ...state,
+                isLoggingIn: false,
                 isLoggedIn: false,
+                logInErrorReason: action.error,
                 me: null
             }
         }
@@ -109,7 +92,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoggedIn: false,
-                user: null
+                me: null
             }
         }
 
