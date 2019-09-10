@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, takeEvery, call, put, delay } from 'redux-saga/effects';
+import { all, fork, takeEvery, call, put, delay } from 'redux-saga/effects';
 import {
     LOG_IN_REQUEST,
     LOG_IN_SUCCESS,
@@ -39,7 +39,9 @@ function signUpAPI() {
 
 function* signUp() {
     try {
-        yield call(signUpAPI)
+        //yield call(signUpAPI)
+        yield delay(2000)
+        throw new Error('테스트 에러')
         yield put({ 
             type: SIGN_UP_SUCCESS
         })
@@ -47,7 +49,8 @@ function* signUp() {
     } catch(e) {
         console.error(e)
         yield put({
-            type: SIGN_UP_FAILURE
+            type: SIGN_UP_FAILURE,
+            error: e
         })
     }    
 }
