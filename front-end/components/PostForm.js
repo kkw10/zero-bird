@@ -1,21 +1,50 @@
-import React from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Form, Input, Button } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { ADD_POST_REQUEST } from "../reducers/post";
 
 const PostForm = () => {
-    const imagePath = useSelector(state => state.post.imagePath);
+    const dispatch = useDispatch();
+    const { isAddingPost, imagePath, postAdded } = useSelector(state => state.post);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        if(postAdded) {
+            setText("") 
+        }
+    }, [postAdded])
+
+    const onSubmitForm = useCallback((e) => {
+        e.preventDefault();
+        dispatch({
+            type: ADD_POST_REQUEST,
+            data: {
+                text, 
+            }
+        })
+    }, [])
+
+    const onChangeText = useCallback((e) => {
+        setText(e.target.value);
+    }, [])
 
     return (
         <>
             <Form 
                 style={{ marginBottom: 20, marginTop: 20 }} 
                 encType="multipart/form-data"
+                onSubmit={onSubmitForm}
             >
-                <Input.TextArea maxLength={140} placeholder="어떤 신기한 일이 있었나요?" />
+                <Input.TextArea 
+                    maxLength={140} 
+                    value={text} 
+                    placeholder="어떤 신기한 일이 있었나요?" 
+                    onChange={onChangeText}
+                />
                 <div>
                     <input type="file" multiple hidden />
                     <Button>이미지 업로드</Button>
-                    <Button type="primary" style={{ float: 'right' }} htmlType="submit">짹짹</Button>
+                    <Button type="primary" style={{ float: 'right' }} htmlType="submit" loading={isAddingPost}>짹짹</Button>
                 </div>
                 <div>
                     {imagePath.map((v, i) => {

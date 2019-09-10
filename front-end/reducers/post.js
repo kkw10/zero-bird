@@ -9,7 +9,17 @@ export const initialState = {
     }],
     imagePath: [],
     addPostErrorReason: false,
-    isAddingPost: false
+    isAddingPost: false,
+    postAdded: false
+}
+
+const dummyPost1 = {
+    User: {
+        id: 1,
+        nickname: 'Koon'
+    },
+    content: 'react를 배워봅시다!!!',
+    img: 'https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/04/1493235373large_react_apps_A-01.png'
 }
 
 export const ADD_DUMMY = "ADD_DUMMY";
@@ -74,14 +84,32 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_POST_REQUEST: {
             return {
-                ...state
+                ...state,
+                isAddingPost: true,
+                addPostErrorReason: '',
+                postAdded: false,
             }
         }
+        case ADD_POST_SUCCESS: {
+            return {
+                ...state,
+                isAddingPost: false,
+                mainPosts: [dummyPost1, ...state.mainPosts],
+                postAdded: true
+            }
+        }
+        case ADD_POST_FAILURE: {
+            return {
+                ...state,
+                isAddingPost: false,
+                addPostErrorReason: action.error
+            }
+        }        
 
         case ADD_DUMMY: {
             return {
                 ...state,
-                mainPosts: [action.data, ...state.mainPosts]
+                mainPosts: [addDummy, ...state.mainPosts]
             }
         }
 
