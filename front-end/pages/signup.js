@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useInput from '../hooks/useInput';
+import Router from 'next/router';
 import { Form, Input, Checkbox, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { SIGN_UP_REQUEST } from '../reducers/user';
@@ -13,7 +14,14 @@ const Signup = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [termError, setTermError] = useState(false);
     const dispatch = useDispatch();
-    const { isSigningUp } = useSelector(state => state.user)
+    const { isSigningUp, me } = useSelector(state => state.user)
+
+    useEffect(() => {
+        if(me) {
+            alert('로그인이 완료되었습니다, 메인페이지로 이동합니다.')
+            Router.push('/')
+        }
+    }, [me && me.id]) // javascript 객체는 undefined일 수도 있으니 방어적 코딩을 함
 
     const onSubmit = useCallback((e) => {
         e.preventDefault()
