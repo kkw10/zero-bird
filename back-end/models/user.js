@@ -14,12 +14,15 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         }
     }, {
-        charset: 'utf-8',
-        collate: 'utf8-_general_ci' // 한글 저장을 위한 설정
+        charset: 'utf8',
+        collate: 'utf8_general_ci' // 한글 저장을 위한 설정
     })
 
     User.associate = (db) => { // 연관된 다른 테이블 저장
-        db.User.hasMany(db.Post); // User테이블은 Post테이블을 여러개 가질 수 있다.
+        db.User.hasMany(db.Post, { as: 'Post' }); // User테이블은 Post테이블을 여러개 가질 수 있다.
+        db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' }); // belongsToMany는 as를 달아두는 것이 좋다.
+        db.User.belongsToMany(db.Post, { through: 'Follow', as: 'Followers' }); // as는 테이블 내에서 연결관계가 있을 경우 구분하기 위해서 사용한다.
+        db.User.belongsToMany(db.Post, { through: 'Follow', as: 'Followings' });
         db.User.hasMany(db.Comment);
     };
 

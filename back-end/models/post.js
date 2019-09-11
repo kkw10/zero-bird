@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         db.Post.belongsTo(db.User); // Post 테이블에  User 테이블의 UserId를 저장함
         db.Post.hasMany(db.Comment);
         db.Post.hasMany(db.Image);
-        db.Post.belongsTo(db.Post); // 게시글을 리트윗 할 경우
+        db.Post.belongsTo(db.Post, { as: "Retweet" }); // 게시글을 리트윗 할 경우
+        db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag' });
+        db.Post.belongsToMany(db.User, { throgh: 'Like', as: 'Likers' })
     }
 
     return Post;

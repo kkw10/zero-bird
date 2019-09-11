@@ -1,7 +1,9 @@
 const express = require('express');
-
+const db = require('./models')
 const app = express();
 const PORT = 1991;
+
+db.sequelize.sync();
 
 app.get('/', (req, res) => {
     res.send('Hello, server')
