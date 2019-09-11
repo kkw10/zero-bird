@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "root",
+    "password": "zerobird",
+    "database": "react-zerobird",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": "zerobird",
+    "database": "react-zerobird",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "zerobird",
+    "database": "react-zerobird",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "operatorsAliases": false
+  }
+}
