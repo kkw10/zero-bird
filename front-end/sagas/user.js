@@ -33,15 +33,13 @@ function* watchLogin() {
     yield takeEvery(LOG_IN_REQUEST, login) // LOG_IN action을 받으면 login 함수를 실행한다.
 }
 
-function signUpAPI() {
-    return axios.post('/login')
+function signUpAPI(signUpData) {
+    return axios.post('http://localhost:1991/api/user/', signUpData)
 }
 
-function* signUp() {
+function* signUp(action) {
     try {
-        //yield call(signUpAPI)
-        yield delay(2000)
-        throw new Error('테스트 에러')
+        yield call(signUpAPI, action.data)
         yield put({ 
             type: SIGN_UP_SUCCESS
         })
