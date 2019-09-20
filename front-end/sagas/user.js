@@ -12,7 +12,10 @@ import axios from 'axios';
 axios.defaults.baseURL = "http://localhost:1991";
 
 function loginAPI(loginData) { // 서버에 요청을 보내는 부분
-    return axios.post('/api/user/login', loginData)
+    return axios.post('/api/user/login', loginData, {
+        widthCredentials: true
+    })
+    
 }
 
 function* login(action) {
