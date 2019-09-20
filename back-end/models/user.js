@@ -19,10 +19,10 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     User.associate = (db) => { // 연관된 다른 테이블 저장
-        db.User.hasMany(db.Post, { as: 'Post' }); // User테이블은 Post테이블을 여러개 가질 수 있다.
+        db.User.hasMany(db.Post, { as: 'Posts' }); // User테이블은 Post테이블을 여러개 가질 수 있다.
         db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' }); // belongsToMany는 as를 달아두는 것이 좋다.
-        db.User.belongsToMany(db.Post, { through: 'Follow', as: 'Followers' }); // as는 테이블 내에서 연결관계가 있을 경우 구분하기 위해서 사용한다.
-        db.User.belongsToMany(db.Post, { through: 'Follow', as: 'Followings' });
+        db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followers', foreignKey: 'followingId' }); // as는 테이블 내에서 연결관계가 있을 경우 구분하기 위해서 사용한다.
+        db.User.belongsToMany(db.User, { through: 'Follow', as: 'Followings', foreignKey: 'followerId' });
         db.User.hasMany(db.Comment);
     };
 
