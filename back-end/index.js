@@ -28,7 +28,7 @@ app.use(cors({
 }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(expressSession({
-    name: 'session',
+    name: 'rechard',
     resave: false, // 매번 새션 강제 저장
     saveUninitialized: false, // 빈 값도 저장
     secret: process.env.COOKIE_SECRET, // 암호화 키 값

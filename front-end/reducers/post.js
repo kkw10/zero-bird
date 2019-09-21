@@ -99,6 +99,7 @@ export const addDummy = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        // 게시글 작성 관련 로직
         case ADD_POST_REQUEST: {
             return {
                 ...state,
@@ -111,7 +112,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 isAddingPost: false,
-                mainPosts: [dummyPost1, ...state.mainPosts],
+                mainPosts: [action.data, ...state.mainPosts],
                 postAdded: true
             }
         }
@@ -123,6 +124,7 @@ const reducer = (state = initialState, action) => {
             }
         }        
 
+        // 댓글 작성 관련 로직
         case ADD_COMMENT_REQUEST: {
             return {
                 ...state,
@@ -152,6 +154,25 @@ const reducer = (state = initialState, action) => {
                 addCommentErrorReason: action.error,
             }
         }
+
+        // 작성된 글 불러오기 관련 로직
+        case LOAD_MAIN_POSTS_REQUEST: {
+            return {
+                ...state,
+                mainPosts: []
+            }
+        }
+        case LOAD_MAIN_POSTS_SUCCESS: {
+            return {
+                ...state,
+                mainPosts: action.data
+            }
+        }
+        case LOAD_MAIN_POSTS_FAILURE: {
+            return {
+                ...state,
+            }
+        }                
 
         case ADD_DUMMY: {
             return {

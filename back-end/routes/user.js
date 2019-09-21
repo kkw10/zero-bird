@@ -5,7 +5,12 @@ const db = require('../models');
 const passport = require('passport')
 
 router.get('/', (req, res) => {
-
+    if(!req.user) {
+        return res.status(401).send('로그인이 필요합니다.');
+    }
+    const user = Object.assign({}, req.user.toJSON());
+    delete user.password;
+    res.json(user);
 });
 
 router.post('/', async (req, res, next) => { // 회원가입 라우터

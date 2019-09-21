@@ -4,6 +4,7 @@ const local = require('./local');
 
 module.exports = () => {
     passport.serializeUser((user, done) => {
+        console.log(`serializeUser ${user}`)
         return done(null, user.id);
     });
 
