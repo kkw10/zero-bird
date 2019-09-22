@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 const Home = () => {
-    const user = useSelector(state => state.user.user);
     const me = useSelector(state => state.user.me);
     const { mainPosts } = useSelector(state => state.post);
     const dispatch = useDispatch();
@@ -18,8 +17,8 @@ const Home = () => {
 
     return (
         <div>
-            { user 
-                ? <div>{ user.nickname }님께서 로그인 했습니다.</div> 
+            { me 
+                ? <div>{ me.nickname }님께서 로그인 했습니다.</div> 
                 : <div>로그인을 해주세요!</div>  
             }
             { me && <PostForm /> }

@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/', async (req, res, next) => {  
     try {
         const hashtags = req.body.content.match(/#[^\s]+/g)
-        const newPost = await db.Post.creat({
+        const newPost = await db.Post.create({
             content: req.body.content,
             UserId: req.user.id
         })
@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
             const result = await Promise.all(hashtags.map(tag => db.Hashtag.findOrCreate(
                 { where: { name: tag.slice(1).toLowerCase() } }
             )))
-            console.log(result);
+            
             await newPost.addHashtags(result.map(r => r[0])) // add~ 함수는 시퀄라이즈에서 associate를 참조하여 자동생성해주는 함수임.
         }
 
@@ -29,6 +29,7 @@ router.post('/', async (req, res, next) => {
             }], 
             order: [['createdAt', 'DESC']] // 내림차순 정렬
         })
+        console.log(fullPost);
         res.json(fullPost);
 
     } catch(e) {

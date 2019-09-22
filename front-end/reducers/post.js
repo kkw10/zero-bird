@@ -163,6 +163,7 @@ const reducer = (state = initialState, action) => {
             }
         }
         case LOAD_MAIN_POSTS_SUCCESS: {
+            console.log(action.data)
             return {
                 ...state,
                 mainPosts: action.data

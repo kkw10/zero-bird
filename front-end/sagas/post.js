@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, put, delay } from 'redux-saga/effects'
+import { all, fork, takeLatest, put, delay, call } from 'redux-saga/effects'
 import { 
     ADD_POST_REQUEST, 
     ADD_POST_SUCCESS, 
@@ -14,14 +14,13 @@ import axios from 'axios';
 
 // 글쓰기 관련 로직
 function addPostAPI(postData) {
-    return axios.post('/post', postData, {
+    return axios.post('/api/post', postData, {
         withCredentials: true
     })
 }
 function* addPost(action) {
     try {
         const result = yield call(addPostAPI, action.data)
-        debugger
         console.log(result.data);
         yield put({
             type: ADD_POST_SUCCESS,
@@ -65,13 +64,12 @@ function* watchAddComment() {
 }
 
 // 작성된 글 가져오기 관련 로직
-function loadMainPostsAPI(postData) {
-    return axios.get('/posts')
+function loadMainPostsAPI() {
+    return axios.get('/api/posts')
 }
 function* loadMainPosts() {
     try {
         const result = yield call(loadMainPostsAPI)
-        console.log(result.data);
         yield put({
             type: LOAD_MAIN_POSTS_SUCCESS,
             data: result.data
@@ -90,8 +88,8 @@ function* watchLoadMainPosts() {
 
 export default function* userSaga() {
     yield all([
+        fork(watchLoadMainPosts),
         fork(watchAddPost),
-        fork(watchAddComment),
-        fork(watchLoadMainPosts)
+        fork(watchAddComment)
     ])
 }
