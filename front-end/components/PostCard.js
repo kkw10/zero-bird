@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
 import { Button, Card, Icon, Avatar, Form, Input, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
 import { ADD_COMMENT_REQUEST } from '../reducers/post';
@@ -55,7 +56,18 @@ const PostCard = ({ value }) => {
                 <Card.Meta
                     avatar={<Avatar>{value.User.nickname[0]}</Avatar>}
                     title={value.User.nickname}
-                    description={value.content}
+                    description={(
+                        <div>{
+                            value.content.split(/(#[^\s]+)/g).map((v) => {
+                                if(v.match(/#[^\s]+/)) {
+                                    return (
+                                        <Link href="/hashtag" key={v}><a>{v}</a></Link>
+                                    )
+                                }
+                                return v;
+                            })
+                        }</div>
+                    )}
                 />
             </Card>  
             {commentFormOpened && (
