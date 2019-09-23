@@ -43,6 +43,7 @@ const PostCard = ({ value }) => {
     return (
         <>
             <Card
+                style={{ marginBottom: 15 }}
                 key={ +value.createdAt }
                 cover={ value.img && <img alt="example" src={value.img} /> }
                 actions={[
@@ -54,7 +55,11 @@ const PostCard = ({ value }) => {
                 extra={<Button>팔로우</Button>}
             >
                 <Card.Meta
-                    avatar={<Avatar>{value.User.nickname[0]}</Avatar>}
+                    avatar={ // 게시글 아바타
+                        <Link href={`/user/${value.User.id}`}><a>
+                            <Avatar>{value.User.nickname[0]}</Avatar>    
+                        </a></Link>
+                    }
                     title={value.User.nickname}
                     description={(
                         <div>{
@@ -84,7 +89,11 @@ const PostCard = ({ value }) => {
                             <li>
                                 <Comment 
                                    author={item.User.nickname} 
-                                   avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                   avatar={
+                                        <Link href={`/user/${value.User.id}`}><a>
+                                            <Avatar>{value.User.nickname[0]}</Avatar>    
+                                        </a></Link>                                       
+                                   }
                                    content={item.content}
                                 />
                             </li>

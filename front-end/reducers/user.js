@@ -139,7 +139,7 @@ const reducer = (state = initialState, action) => {
                     me: action.data
                 }
             }
-
+            
             return {
                 ...state,
                 userInfo: action.data

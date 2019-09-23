@@ -65,9 +65,9 @@ router.get('/:id', async (req, res, next) => {
         })
         const jsonUser = user.toJSON();
         jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
-        jsonUser.Following = jsonUser.Following ? jsonUser.Following.length : 0;
+        jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
         jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
-        req.json(jsonUser);
+        res.json(jsonUser);
 
     } catch(e) {
         console.log(e)

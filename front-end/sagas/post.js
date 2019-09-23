@@ -117,11 +117,12 @@ function* watchLoadHashtagPosts() {
 
 // 특정 유저 글 가져오기 관련 로직
 function loadUserPostsAPI(id) {
-    return axios.get(`/api/${id}/posts`)
+    return axios.get(`/api/user/${id}/posts`)
 }
 function* loadUserPosts(action) {
     try {
         const result = yield call(loadUserPostsAPI, action.data)
+
         yield put({
             type: LOAD_USER_POSTS_SUCCESS,
             data: result.data

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
@@ -27,6 +27,7 @@ const User = ({ id }) => {
         <>
             {userInfo
                 ? (<Card
+                    style={{ marginBottom: 15 }}
                     actions={[
                         <div key="twit">
                             짹짹
@@ -54,7 +55,7 @@ const User = ({ id }) => {
             }
             <div>
                 {mainPosts.map(c => (
-                    <PostCard key={+c.createAt} post={c} />
+                    <PostCard value={c} />
                 ))}
             </div>        
         </>
