@@ -10,7 +10,7 @@ import reducer from '../reducers';
 import sagaMiddleware from '../sagas/middleware';
 import rootSaga from '../sagas';
 
-const ZeroBird = ({ Component, store }) => {
+const ZeroBird = ({ Component, store, pageProps }) => {
     return (
         <Provider store={store}>
             <Head>
@@ -18,7 +18,7 @@ const ZeroBird = ({ Component, store }) => {
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.22.2/antd.min.css"/>
             </Head>
             <AppLayout>
-                <Component />                 
+                <Component {...pageProps} />                 
             </AppLayout>                    
         </Provider>
     )
@@ -26,7 +26,19 @@ const ZeroBird = ({ Component, store }) => {
 
 ZeroBird.propTypes = {
     Component: PropTypes.elementType,
-    store: PropTypes.object
+    store: PropTypes.object,
+    pageProps: PropTypes.object.isRequired
+}
+
+ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전달용
+    console.log(context);
+    const { ctx, Component } = context;
+    let pageProps = {};
+    if(Component.getInitialProps) {
+        pageProps = await context.Component.getInitialProps(ctx);
+    }
+
+    return { pageProps }
 }
 
 export default widthRedux((initialState, options) => {
