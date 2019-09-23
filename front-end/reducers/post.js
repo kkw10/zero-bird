@@ -125,25 +125,34 @@ const reducer = (state = initialState, action) => {
             }
         }
 
-        // 작성된 글 불러오기 관련 로직
-        case LOAD_MAIN_POSTS_REQUEST: {
+        // 작성된 글 불러오기 관련 로직 +
+        // 해시 태그 관련 글 불러 오기 로직 +
+        // 특정 유저 관련 글 불러오기 로직
+        case LOAD_MAIN_POSTS_REQUEST:
+        case LOAD_HASHTAG_POSTS_REQUEST:
+        case LOAD_USER_POSTS_REQUEST: {
             return {
                 ...state,
                 mainPosts: []
             }
         }
-        case LOAD_MAIN_POSTS_SUCCESS: {
+        case LOAD_MAIN_POSTS_SUCCESS:
+        case LOAD_HASHTAG_POSTS_SUCCESS:
+        case LOAD_USER_POSTS_SUCCESS:     {
             console.log(action.data)
             return {
                 ...state,
                 mainPosts: action.data
             }
         }
-        case LOAD_MAIN_POSTS_FAILURE: {
+        case LOAD_MAIN_POSTS_FAILURE:
+        case LOAD_HASHTAG_POSTS_FAILURE:
+        case LOAD_USER_POSTS_FAILURE: {
             return {
                 ...state,
             }
-        }                
+        }           
+
 
         case ADD_DUMMY: {
             return {

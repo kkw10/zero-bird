@@ -17,9 +17,9 @@ const Hashtag = ({ tag }) => { // _app.js에서 파라미터를 받아서 사용
     
     return (
         <div>
-            {mainPosts.map(c => (
-                <PostCard key={+c.createAt} post={c} />
-            ))}
+            {mainPosts.map(c => {
+                return <PostCard value={c} />
+            })}
         </div>
     )
 }
