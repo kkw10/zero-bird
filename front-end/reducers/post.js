@@ -1,14 +1,5 @@
 export const initialState = {
-    mainPosts: [{
-        id: 1,
-        User: {
-            id: 1,
-            nickname: 'Koon',
-        },
-        content: 'golang을 배워봅시다!!!',
-        Comments: [],
-        img: 'https://miro.medium.com/max/3000/1*30aoNxlSnaYrLhBT0O1lzw.png'
-    }],
+    mainPosts: [],
     imagePath: [],
     addPostErrorReason: false,
     isAddingPost: false,
@@ -16,27 +7,6 @@ export const initialState = {
     isAddingComment: false,
     addCommentErrorReason:'',
     commentAdded: false,
-}
-
-const dummyPost1 = {
-    id: 2,
-    User: {
-        id: 1,
-        nickname: 'Koon'
-    },
-    content: 'react를 배워봅시다!!!',
-    Comments: [],
-    img: 'https://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2017/04/1493235373large_react_apps_A-01.png'
-}
-
-const dummyComment1 = {
-    id: 1,
-    User: {
-        id: 2,
-        nickname: 'Moon'
-    },
-    createdAt: new Date(),
-    content: '같이 합시다!'
 }
 
 export const ADD_DUMMY = "ADD_DUMMY";
@@ -136,7 +106,7 @@ const reducer = (state = initialState, action) => {
         case ADD_COMMENT_SUCCESS: {
             const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId)
             const post = state.mainPosts[postIndex]
-            const Comments = [...post.Comments, dummyComment1];
+            const Comments = [...post.Comments, action.data.comment];
             const mainPosts = [...state.mainPosts];
             mainPosts[postIndex] = { ...post, Comments }
 

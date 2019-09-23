@@ -47,5 +47,5 @@ app.use('/api/post', postAPIRouter)
 app.use('/api/posts', postsAPIRouter)
 
 app.listen(PORT, () => {
-    console.log(`server is running... on localhost:${PORT}`)
+    console.log(`Back-end server is running... on localhost:${PORT}`)
 })
