@@ -91,17 +91,21 @@ function* watchLogOut() {
 }
 
 // # 로그인 상태 유지 관련 로직
-function loadUserAPI() {
-    return axios.get('/api/user/', {
+function loadUserAPI(userId) {
+    return axios.get(
+        userId 
+            ? `/user/${userId}` 
+            : '/api/user/', {
         withCredentials: true
     })
 }
-function* loadUser() {
+function* loadUser(action) {
     try {
-        const result = yield call(loadUserAPI)
+        const result = yield call(loadUserAPI, action.data)
         yield put({ 
             type: LOAD_USER_SUCCESS,
-            data: result.data
+            data: result.data,
+            me: !action.data
         })
 
     } catch(e) {

@@ -14,6 +14,7 @@ const PORT = 1991;
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
+const hashtagAPIRouter = require('./routes/hashtag');
 
 dotenv.config();
 db.sequelize.sync();
@@ -45,6 +46,7 @@ app.use(passport.session()); // 패스포트 세션은 익스프레스 세션 �
 app.use('/api/user', userAPIRouter)
 app.use('/api/post', postAPIRouter)
 app.use('/api/posts', postsAPIRouter)
+app.use('/api/hashtag', hashtagAPIRouter) 
 
 app.listen(PORT, () => {
     console.log(`Back-end server is running... on localhost:${PORT}`)

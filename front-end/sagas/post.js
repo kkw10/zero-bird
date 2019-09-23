@@ -8,7 +8,13 @@ import {
     ADD_COMMENT_SUCCESS,
     LOAD_MAIN_POSTS_REQUEST,
     LOAD_MAIN_POSTS_SUCCESS,
-    LOAD_MAIN_POSTS_FAILURE    
+    LOAD_MAIN_POSTS_FAILURE,
+    LOAD_HASHTAG_POSTS_REQUEST,
+    LOAD_HASHTAG_POSTS_SUCCESS,
+    LOAD_HASHTAG_POSTS_FAILURE, 
+    LOAD_USER_POSTS_REQUEST,
+    LOAD_USER_POSTS_SUCCESS,
+    LOAD_USER_POSTS_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -86,10 +92,58 @@ function* watchLoadMainPosts() {
     yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts)
 }
 
+// 해시태그 관련 로직
+function loadHashtagPostsAPI(tag) {
+    return axios.get(`/api/hashtag/${tag}`)
+}
+function* loadHashtagPosts(action) {
+    try {
+        const result = yield call(loadHashtagPostsAPI, action.data)
+        yield put({
+            type: LOAD_HASHTAG_POSTS_SUCCESS,
+            data: result.data
+        })
+
+    } catch(e) {
+        yield put({
+            type: LOAD_HASHTAG_POSTS_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchLoadHashtagPosts() {
+    yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts)
+}
+
+// 특정 유저 글 가져오기 관련 로직
+function loadUserPostsAPI(id) {
+    return axios.get(`/api/user/${id}`)
+}
+function* loadUserPosts(action) {
+    try {
+        const result = yield call(loadUserPostsAPI, action.data)
+        yield put({
+            type: LOAD_USER_POSTS_SUCCESS,
+            data: result.data
+        })
+
+    } catch(e) {
+        yield put({
+            type: LOAD_USER_POSTS_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchLoadUserPosts() {
+    yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts)
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchLoadMainPosts),
         fork(watchAddPost),
-        fork(watchAddComment)
+        fork(watchAddComment),
+        fork(watchLoadHashtagPosts),
+        fork(watchLoadUserPosts)
     ])
 }
