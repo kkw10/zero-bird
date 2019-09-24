@@ -179,14 +179,21 @@ const reducer = (state = initialState, action) => {
         case UPLOAD_IMAGES_SUCCESS: {
             return {
                 ...state,
-                imagePaths: [...state.imagePaths, ...action.data]
+                imagePath: [...state.imagePath, ...action.data]
             }
         }
         case UPLOAD_IMAGES_FAILURE: {
             return {
                 ...state
             }
-        }          
+        }      
+        
+        case REMOVE_IMAGE: {
+            return {
+                ...state,
+                imagePath: state.imagePath.filter((v, i) => i !== action.index)
+            }
+        }
 
         case ADD_DUMMY: {
             return {

@@ -21,6 +21,7 @@ db.sequelize.sync();
 passportConfig(); 
 
 app.use(morgan('dev'));
+app.use('/', express.static('uploads'));
 app.use(express.json()); // express에서 json을 처리하기 위해서 사용
 app.use(express.urlencoded({ extended: true })); // form에서 넘어온 데이터를 처리하기 위해서 사용
 app.use(cors({

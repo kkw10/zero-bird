@@ -176,7 +176,7 @@ function* watchLoadUserPosts() {
 
 // 이미지 전송하기 관련 로직
 function uploadImagesAPI(formData) {
-    return axios.get(`/api/post/images`, formData, {
+    return axios.post(`/api/post/images`, formData, {
         withCredentials: true
     })
 }

@@ -1,7 +1,22 @@
 const express = require('express');
+const path = require('path');
 const db = require('../models');
+const multer = require('multer'); // body parser로는 form data를 파싱할 수 없음
 const router = express.Router();
 const { isLoggedIn } = require('./middleware');
+const upload = multer({
+    storage: multer.diskStorage({
+        destination(req, file, done) {
+            done(null, 'uploads')
+        },
+        filename(req, file, done) {
+            const ext = path.extname(file.originalname);
+            const basename = path.basename(file.originalname, ext); // ex) zero.png => ext === .png, basename === zero
+            done(null, basename + new Date().valueOf() + ext); // 파일명 중복 방지를 위함
+        },
+        limits: { fileSize: 20 * 1024 * 1024 } // 20mb로 파일크기 제한
+    })
+})
 
 router.post('/', isLoggedIn, async (req, res, next) => {  
     try {
@@ -39,8 +54,12 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     } 
 });
 
-router.post('/images', (req, res) => {
-
+// 이미지를 한장만 올린다면 upload.single()
+// etc. upload.fields([{name: 'a'}, {name: 'b'}]) => 이미지 형식이 여러가지가 있을 경우
+// etc. upload.none() => 이미지나 파일을 하나도 올리지 않을 경우
+router.post('/images', upload.array('image'), (req, res) => {
+    console.log(req.files);
+    res.json(req.files.map(v => v.filename))
 });
 
 router.get('/:id/comments', async (req, res, next) => {
