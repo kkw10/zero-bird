@@ -21,13 +21,17 @@ const PostForm = () => {
             return alert('게시글을 작성해주세요.')
         }
 
+        const formData = new FormData();
+        imagePath.forEach((i) => {
+            formData.append('image', i);
+        })
+        formData.append('content', text);
+
         dispatch({
             type: ADD_POST_REQUEST,
-            data: {
-                content: text, 
-            }
+            data: formData
         })
-    }, [text])
+    }, [text, imagePath])
 
     const onChangeText = useCallback((e) => {
         setText(e.target.value);

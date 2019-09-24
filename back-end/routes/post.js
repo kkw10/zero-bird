@@ -18,7 +18,8 @@ const upload = multer({
     })
 })
 
-router.post('/', isLoggedIn, async (req, res, next) => {  
+// 이미지 업로드의 경우 주소만 받기 때문에 upload.none()을 사용한다.ㄴ
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {  
     try {
         const hashtags = req.body.content.match(/#[^\s]+/g)
         const newPost = await db.Post.create({
@@ -34,6 +35,21 @@ router.post('/', isLoggedIn, async (req, res, next) => {
             await newPost.addHashtags(result.map(r => r[0])) // add~ 함수는 시퀄라이즈에서 associate를 참조하여 자동생성해주는 함수임.
         }
 
+        if(req.body.image) {
+            if(Array.isArray(req.body.image)) { // 이미지 주소를 여러개 올린 경우 (multer의 단점임)
+                const images = await Promise.all(req.body.image.map((image) => {
+                    return db.Image.create({ src: image })
+                }));
+                await newPost.addImages(images);
+
+            } else {
+                const image = await db.Image.create({ // 이미지 주소를 하나 올린 경우
+                    src: req.body.image
+                });
+                await newPost.addImage(image);
+            }
+        }
+
         // const User = await newPost.getUser(); // way1 : 시퀄라이즈 자동 생성함수(get~) 사용
         // newPost.User = User;
         // res.json(newPost);
@@ -42,6 +58,8 @@ router.post('/', isLoggedIn, async (req, res, next) => {
             include: [{
                 model: db.User,
                 attributes: ['id', 'nickname']
+            }, {
+                model: db.Image
             }], 
             order: [['createdAt', 'DESC']] // 내림차순 정렬
         })
