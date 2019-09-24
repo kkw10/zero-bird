@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { Button, Card, Icon, Avatar, Form, Input, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
-import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import { 
+    ADD_COMMENT_REQUEST,
+    LOAD_COMMENTS_REQUEST 
+} from '../reducers/post';
 
 const PostCard = ({ value }) => {
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -14,6 +17,13 @@ const PostCard = ({ value }) => {
 
     const onToggleComment = useCallback(() => {
         setCommentFormOpened(prev => !prev);
+        if(!commentFormOpened) {
+            dispatch({
+                type: LOAD_COMMENTS_REQUEST,
+                data: value.id
+            })
+        }
+
     }, [])
 
     const onSubmitComment = useCallback((e) => {
@@ -24,11 +34,12 @@ const PostCard = ({ value }) => {
         dispatch({
             type: ADD_COMMENT_REQUEST,
             data: {
-                postId: value.id
+                postId: value.id,
+                content: commentText
             }
         })
 
-    }, [me && me.id])
+    }, [me && me.id, commentText])
 
     useEffect(() => {
         if(isAddingComment) {

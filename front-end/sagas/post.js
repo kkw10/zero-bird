@@ -14,7 +14,10 @@ import {
     LOAD_HASHTAG_POSTS_FAILURE, 
     LOAD_USER_POSTS_REQUEST,
     LOAD_USER_POSTS_SUCCESS,
-    LOAD_USER_POSTS_FAILURE,        
+    LOAD_USER_POSTS_FAILURE,     
+    LOAD_COMMENTS_REQUEST,
+    LOAD_COMMENTS_SUCCESS,
+    LOAD_COMMENTS_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -45,16 +48,19 @@ function* watchAddPost() {
 }
 
 // 댓글 작성 관련 로직
-function addCommentAPI() {
-    
+function addCommentAPI(data) {
+    return axios.post(`/api/post/${data.postId}/comment`, { content: data.content }, {
+        withCredentials: true,
+    })
 }
 function* addComment(action) {
     try {
-        yield delay(2000)
+        const result = yield call(addCommentAPI, action.data)
         yield put({
             type: ADD_COMMENT_SUCCESS,
             data: {
-                postId: action.data.postId
+                postId: action.data.postId,
+                comment: result.data
             }
         })
 
@@ -67,6 +73,32 @@ function* addComment(action) {
 }
 function* watchAddComment() {
     yield takeLatest(ADD_COMMENT_REQUEST, addComment)
+}
+
+// 작성된 댓글 가져오기 관련 로직
+function loadCommentsAPI(postId) {
+    return axios.get(`/api/post/${postId}/comments`)
+}
+function* loadComments(action) {
+    try {
+        const result = yield call(loadCommentsAPI, action.data)
+        yield put({
+            type: LOAD_COMMENTS_SUCCESS,
+            data: {
+                postId: action.data,
+                comments: result.data
+            }
+        })
+
+    } catch(e) {
+        yield put({
+            type: LOAD_COMMENTS_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchLoadComments() {
+    yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments)
 }
 
 // 작성된 글 가져오기 관련 로직
@@ -144,6 +176,7 @@ export default function* userSaga() {
         fork(watchLoadMainPosts),
         fork(watchAddPost),
         fork(watchAddComment),
+        fork(watchLoadComments),
         fork(watchLoadHashtagPosts),
         fork(watchLoadUserPosts)
     ])
