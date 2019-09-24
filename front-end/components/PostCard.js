@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import PostImages from './PostImages';
 import Link from 'next/link';
 import { Button, Card, Icon, Avatar, Form, Input, List, Comment } from 'antd';
 import PropTypes from 'prop-types';
@@ -53,10 +54,11 @@ const PostCard = ({ value }) => {
 
     return (
         <>
+        {/* <img alt="example" src={`http://localhost:1991/${value.Images[0].src}`} /> */}
             <Card
                 style={{ marginBottom: 15 }}
                 key={ +value.createdAt }
-                cover={ value.img && <img alt="example" src={value.img} /> }
+                cover={ value.Images[0] && <PostImages images={value.Images} /> }
                 actions={[
                     <Icon type="retweet" key="retweet" />,
                     <Icon type="heart" key="heart" />,
