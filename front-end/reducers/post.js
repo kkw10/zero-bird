@@ -170,6 +170,23 @@ const reducer = (state = initialState, action) => {
             }
         }           
 
+        // 이미지 업로드 관련 로직
+        case UPLOAD_IMAGES_REQUEST: {
+            return {
+                ...state,
+            }
+        }
+        case UPLOAD_IMAGES_SUCCESS: {
+            return {
+                ...state,
+                imagePaths: [...state.imagePaths, ...action.data]
+            }
+        }
+        case UPLOAD_IMAGES_FAILURE: {
+            return {
+                ...state
+            }
+        }          
 
         case ADD_DUMMY: {
             return {

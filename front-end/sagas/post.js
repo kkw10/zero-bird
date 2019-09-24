@@ -17,7 +17,10 @@ import {
     LOAD_USER_POSTS_FAILURE,     
     LOAD_COMMENTS_REQUEST,
     LOAD_COMMENTS_SUCCESS,
-    LOAD_COMMENTS_FAILURE,        
+    LOAD_COMMENTS_FAILURE,  
+    UPLOAD_IMAGES_REQUEST,
+    UPLOAD_IMAGES_SUCCESS,
+    UPLOAD_IMAGES_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -171,6 +174,31 @@ function* watchLoadUserPosts() {
     yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts)
 }
 
+// 이미지 전송하기 관련 로직
+function uploadImagesAPI(formData) {
+    return axios.get(`/api/post/images`, formData, {
+        withCredentials: true
+    })
+}
+function* uploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.data)
+        yield put({
+            type: UPLOAD_IMAGES_SUCCESS,
+            data: result.data
+        })
+
+    } catch(e) {
+        yield put({
+            type: UPLOAD_IMAGES_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchUploadImages() {
+    yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages)
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchLoadMainPosts),
@@ -178,6 +206,7 @@ export default function* userSaga() {
         fork(watchAddComment),
         fork(watchLoadComments),
         fork(watchLoadHashtagPosts),
-        fork(watchLoadUserPosts)
+        fork(watchLoadUserPosts),
+        fork(watchUploadImages)
     ])
 }
