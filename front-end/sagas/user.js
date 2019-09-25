@@ -11,7 +11,13 @@ import {
     LOAD_USER_FAILURE,
     LOG_OUT_REQUEST,
     LOG_OUT_SUCCESS,
-    LOG_OUT_FAILURE
+    LOG_OUT_FAILURE,
+    FOLLOW_USER_REQUEST,
+    FOLLOW_USER_SUCCESS,
+    FOLLOW_USER_FAILURE,
+    UNFOLLOW_USER_REQUEST,
+    UNFOLLOW_USER_SUCCESS,
+    UNFOLLOW_USER_FAILURE
 
 } from '../reducers/user';
 import axios from 'axios';
@@ -120,11 +126,65 @@ function* watchLoadUser() {
     yield takeEvery(LOAD_USER_REQUEST, loadUser) // LOG_IN action을 받으면 login 함수를 실행한다.
 }
 
+// # 팔로우 관련 로직
+function followAPI(userId) {
+    return axios.post(`/api/user/${userId}/follow`, {}, {
+        withCredentials: true
+    })
+}
+function* follow(action) {
+    try {
+        const result = yield call(followAPI, action.data)
+        yield put({ 
+            type: FOLLOW_USER_SUCCESS,
+            data: result.data
+        })
+
+    } catch(e) {
+        console.error(e)
+        yield put({
+            type: FOLLOW_USER_FAILURE,
+            error: e
+        })
+    }    
+}
+function* watchFollow() {
+    yield takeEvery(FOLLOW_USER_REQUEST, follow) // LOG_IN action을 받으면 login 함수를 실행한다.
+}
+
+// # 언팔로우 관련 로직
+function unfollowAPI(userId) {
+    return axios.delete(`/api/user/${userId}/follow`, {
+        withCredentials: true
+    })
+}
+function* unfollow(action) {
+    try {
+        const result = yield call(unfollowAPI, action.data)
+        yield put({ 
+            type: UNFOLLOW_USER_SUCCESS,
+            data: result.data
+        })
+
+    } catch(e) {
+        console.error(e)
+        yield put({
+            type: UNFOLLOW_USER_FAILURE,
+            error: e
+        })
+    }    
+}
+function* watchUnfollow() {
+    yield takeEvery(UNFOLLOW_USER_REQUEST, unfollow) // LOG_IN action을 받으면 login 함수를 실행한다.
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchLogin),
         fork(watchSignUp),
         fork(watchLogOut),
-        fork(watchLoadUser)
+        fork(watchLoadUser),
+        fork(watchFollow),
+        fork(watchUnfollow)
     ])
 }
