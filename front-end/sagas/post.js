@@ -20,7 +20,13 @@ import {
     LOAD_COMMENTS_FAILURE,  
     UPLOAD_IMAGES_REQUEST,
     UPLOAD_IMAGES_SUCCESS,
-    UPLOAD_IMAGES_FAILURE,        
+    UPLOAD_IMAGES_FAILURE,       
+    LIKE_POST_REQUEST,
+    LIKE_POST_SUCCESS,
+    LIKE_POST_FAILURE,      
+    UNLIKE_POST_REQUEST,
+    UNLIKE_POST_SUCCESS,
+    UNLIKE_POST_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
 
@@ -199,7 +205,63 @@ function* watchUploadImages() {
     yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages)
 }
 
-export default function* userSaga() {
+// 좋아요 관련 로직
+function likePostAPI(postId) {
+    return axios.post(`/api/post/${postId}/like`, {}, {
+        withCredentials: true
+    })
+}
+function* likePost(action) {
+    try {
+        const result = yield call(likePostAPI, action.data)
+        yield put({
+            type: LIKE_POST_SUCCESS,
+            data: {
+                postId: action.data,
+                userId: result.data.userId
+            }
+        })
+
+    } catch(e) {
+        yield put({
+            type: LIKE_POST_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchLikePost() {
+    yield takeLatest(LIKE_POST_REQUEST, likePost)
+}
+
+// 좋아요 취소 관련 로직
+function unlikePostAPI(postId) {
+    return axios.delete(`/api/post/${postId}/like`, {
+        withCredentials: true
+    })
+}
+function* unlikePost(action) {
+    try {
+        const result = yield call(unlikePostAPI, action.data)
+        yield put({
+            type: UNLIKE_POST_SUCCESS,
+            data: {
+                postId: action.data,
+                userId: result.userId                
+            }
+        })
+
+    } catch(e) {
+        yield put({
+            type: UNLIKE_POST_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchUnlikePost() {
+    yield takeLatest(UNLIKE_POST_REQUEST, unlikePost)
+}
+
+export default function* postSaga() {
     yield all([
         fork(watchLoadMainPosts),
         fork(watchAddPost),
@@ -207,6 +269,8 @@ export default function* userSaga() {
         fork(watchLoadComments),
         fork(watchLoadHashtagPosts),
         fork(watchLoadUserPosts),
-        fork(watchUploadImages)
+        fork(watchUploadImages),
+        fork(watchLikePost),
+        fork(watchUnlikePost)
     ])
 }
