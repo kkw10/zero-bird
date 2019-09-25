@@ -8,7 +8,8 @@ import {
     ADD_COMMENT_REQUEST,
     LOAD_COMMENTS_REQUEST, 
     UNLIKE_POST_REQUEST,
-    LIKE_POST_REQUEST
+    LIKE_POST_REQUEST,
+    RETWEET_REQUEST
 } from '../reducers/post';
 
 const PostCard = ({ value }) => {
@@ -17,7 +18,7 @@ const PostCard = ({ value }) => {
     const { me } = useSelector(state => state.user);
     const { commentAdded, isAddingComment } = useSelector(state => state.post);
     const dispatch = useDispatch();
-    
+
     const isLiked = me && value.Likers && value.Likers.find(v => v.id === me.id)
 
     const onToggleComment = useCallback(() => {
@@ -76,6 +77,18 @@ const PostCard = ({ value }) => {
 
     }, [me && me.id, value && value.id, isLiked])
 
+    const onRetweet = userCallback(() => {
+        if(!me) {
+            return alert('로그인이 필요합니다.')
+        }
+
+        return dispatch({
+            type: RETWEET_REQUEST,
+            data: value.id
+        })
+
+    }, [me && me.id, value && value.id])
+
     return (
         <>
             <Card
@@ -83,7 +96,7 @@ const PostCard = ({ value }) => {
                 key={ +value.createdAt }
                 cover={ value.Images[0] && <PostImages images={value.Images} /> }
                 actions={[
-                    <Icon type="retweet" key="retweet" />,
+                    <Icon type="retweet" key="retweet" onClick={onRetweet} />,
                     <Icon type="heart" key="heart" theme={isLiked ? 'twoTone' : 'outlined'} twoToneColor="#eb2f96" onClick={ onToggleLike } />,
                     <Icon type="message" key="message" onClick={ onToggleComment } />,
                     <Icon type="ellipsis" key="ellipsis" />,
