@@ -3,7 +3,7 @@ const path = require('path');
 const db = require('../models');
 const multer = require('multer'); // body parser로는 form data를 파싱할 수 없음
 const router = express.Router();
-const { isLoggedIn } = require('./middleware');
+const { isLoggedIn } = require('./middleware'); 
 const upload = multer({
     storage: multer.diskStorage({
         destination(req, file, done) {
@@ -14,7 +14,7 @@ const upload = multer({
             const basename = path.basename(file.originalname, ext); // ex) zero.png => ext === .png, basename === zero
             done(null, basename + new Date().valueOf() + ext); // 파일명 중복 방지를 위함
         },
-        limits: { fileSize: 20 * 1024 * 1024 } // 20mb로 파일크기 제한
+        limits: { fileSize: 20 * 1024 * 1024 } // 20mb로 파일크기 제한 
     })
 })
 
@@ -181,14 +181,18 @@ router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
 router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
     try {
         const post = await db.Post.findOne({
-            where: { id: req.params.id }
+            where: { id: req.params.id },
+            include: [{
+                model: db.Post,
+                as: 'Retweet'
+            }]
         })
 
         if(!post) {
             return res.status(404).send('포스트가 존재하지 않습니다.')
         }
 
-        if(req.user.id === post.UserId) {
+        if(req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
             return res.status(403).send('자신의 글은 리트윗할 수 없습니다.')
         }
 

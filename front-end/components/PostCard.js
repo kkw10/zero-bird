@@ -11,6 +11,7 @@ import {
     LIKE_POST_REQUEST,
     RETWEET_REQUEST
 } from '../reducers/post';
+import PostCardContent from './PostCardContent';
 
 const PostCard = ({ value }) => {
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -22,7 +23,7 @@ const PostCard = ({ value }) => {
     const isLiked = me && value.Likers && value.Likers.find(v => v.id === me.id)
 
     const onToggleComment = useCallback(() => {
-        setCommentFormOpened(prev => !prev);
+        setCommentFormOpened(prev => !prev); 
         if(!commentFormOpened) {
             dispatch({
                 type: LOAD_COMMENTS_REQUEST,
@@ -77,7 +78,7 @@ const PostCard = ({ value }) => {
 
     }, [me && me.id, value && value.id, isLiked])
 
-    const onRetweet = userCallback(() => {
+    const onRetweet = useCallback(() => {
         if(!me) {
             return alert('로그인이 필요합니다.')
         }
@@ -101,28 +102,34 @@ const PostCard = ({ value }) => {
                     <Icon type="message" key="message" onClick={ onToggleComment } />,
                     <Icon type="ellipsis" key="ellipsis" />,
                 ]}
+                title={ value.RetweetId ? `${value.User.nickname}님이 리트윗하셨습니다.` : null }
                 extra={<Button>팔로우</Button>}
             >
-                <Card.Meta
-                    avatar={ // 게시글 아바타
-                        <Link href={{ pathname: '/user', query: { id: value.User.id } }} as={`/user/${value.User.id}`}><a>
-                            <Avatar>{value.User.nickname[0]}</Avatar>    
-                        </a></Link>
-                    }
-                    title={value.User.nickname}
-                    description={(
-                        <div>{
-                            value.content.split(/(#[^\s]+)/g).map((v) => {
-                                if(v.match(/#[^\s]+/)) {
-                                    return (
-                                        <Link href={{ pathname: '/hashtag', query: { tag: v.slice(1) } }} as={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link>
-                                    )
+                {
+                    value.RetweetId && value.Retweet
+                    ? (<Card
+                        cover={value.Retweet.Images[0] && <PostImages images={value.Retweet.Images} />}
+                       >
+                            <Card.Meta    
+                                avatar={ // 게시글 아바타
+                                    <Link href={{ pathname: '/user', query: { id: value.User.id } }} as={`/user/${value.Retweet.User.id}`}><a>
+                                        <Avatar>{value.Retweet.User.nickname[0]}</Avatar>    
+                                    </a></Link>
                                 }
-                                return v;
-                            })
-                        }</div>
-                    )}
-                />
+                                title={value.Retweet.User.nickname}
+                                description={<PostCardContent postData={value.Retweet} />}
+                            />                        
+                    </Card>)
+                    : (<Card.Meta
+                        avatar={ // 게시글 아바타
+                            <Link href={{ pathname: '/user', query: { id: value.User.id } }} as={`/user/${value.User.id}`}><a>
+                                <Avatar>{value.User.nickname[0]}</Avatar>    
+                            </a></Link>
+                        }
+                        title={value.User.nickname}
+                        description={<PostCardContent postData={value} />}
+                    />)
+                }
             </Card>  
             {commentFormOpened && (
                 <>
