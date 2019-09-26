@@ -214,7 +214,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_FOLLOWERS_SUCCESS: {
             return {
                 ...state,
-                followerList: action.data
+                followerList: state.followerList.concat(action.data)
             }
         }
         case LOAD_FOLLOWERS_FAILURE: {
@@ -232,7 +232,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_FOLLOWINGS_SUCCESS: {
             return {
                 ...state,
-                followingList: action.data
+                followingList: state.followingList.concat(action.data)
             }
         }
         case LOAD_FOLLOWINGS_FAILURE: {
