@@ -1,13 +1,3 @@
-// dummy
-const dummyUser = {     
-    id: 1,
-    nickname: 'Koon',
-    post: [],
-    followings: [],
-    followers: [],
-    signUpData: {},  
-}
-
 // Initial state
 export const initialState = {
     isLoggingOut: false, // 로그아웃 시도중
@@ -19,7 +9,9 @@ export const initialState = {
     me: null, // 내 정보
     followingList: [],
     followerList: [],
-    userInfo: null
+    userInfo: null,
+    isEditingNickname: false,
+    editNicknameErrorReason: ''
 }
 
 // Action name (Request, Success, Failure => RSF시리즈는 "비동기 요청"의 경우 사용함 : 즉 리덕스 사가가 필요함)
@@ -58,6 +50,10 @@ export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+
+export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
+export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
+export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
@@ -263,6 +259,32 @@ const reducer = (state = initialState, action) => {
         case REMOVE_FOLLOWER_FAILURE: {
             return {
                 ...state
+            }
+        } 
+        
+        // 닉네임 수정하기 관련 로직
+        case EDIT_NICKNAME_REQUEST: {
+            return {
+                ...state,
+                isEditingNickname: true,
+                editNicknameErrorReason: ''
+            }
+        }
+        case EDIT_NICKNAME_SUCCESS: {
+            return {
+                ...state,
+                isEditingNickname: false,
+                me: {
+                    ...state.me,
+                    nickname: action.data
+                }
+            }
+        }
+        case EDIT_NICKNAME_FAILURE: {
+            return {
+                ...state,
+                isEditingNickname: false,
+                editNicknameErrorReason: action.error
             }
         }         
         
