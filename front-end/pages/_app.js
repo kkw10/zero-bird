@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
-import widthRedux from 'next-redux-wrapper';
+import withRedux from 'next-redux-wrapper';
+import withReduxSaga from 'next-redux-saga'; // next용 redux saga
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware } from 'redux';
 import reducer from '../reducers';
@@ -43,7 +44,7 @@ ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전�
     return { pageProps }
 }
 
-export default widthRedux((initialState, options) => {
+const configureStore = (initialState, options) => {
     const middlewares = [sagaMiddleware];
     const enhancer = process.env.NODE_ENV === 'production' 
     ? compose(
@@ -57,6 +58,8 @@ export default widthRedux((initialState, options) => {
     )
 
     const store = createStore(reducer, initialState, enhancer);
-    sagaMiddleware.run(rootSaga);
+    store.sagaTask = sagaMiddleware.run(rootSaga);
     return store;
-})(ZeroBird);
+}
+
+export default withRedux(configureStore)(withReduxSaga(ZeroBird));

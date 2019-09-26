@@ -9,12 +9,6 @@ const Home = () => {
     const { mainPosts } = useSelector(state => state.post);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_MAIN_POSTS_REQUEST,
-        })
-    }, [])
-
     return (
         <div>
             { me 
@@ -30,5 +24,13 @@ const Home = () => {
         </div>
     )
 } 
+
+// SSR
+Home.getInitialProps = async (context) => {
+    console.log(Object.keys(context));
+    context.store.dispatch({
+        type: LOAD_MAIN_POSTS_REQUEST,
+    })
+}; 
 
 export default Home
