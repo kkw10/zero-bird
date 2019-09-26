@@ -113,7 +113,7 @@ function loadUserAPI(userId) {
         userId 
             ? `/api/user/${userId}`  
             : '/api/user/', {
-        withCredentials: true
+        withCredentials: true 
     })
 }
 function* loadUser(action) {

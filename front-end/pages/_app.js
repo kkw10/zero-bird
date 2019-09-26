@@ -10,6 +10,8 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import reducer from '../reducers';
 import sagaMiddleware from '../sagas/middleware';
 import rootSaga from '../sagas';
+import { LOAD_USER_REQUEST } from '../reducers/user';
+import axios from 'axios';
 
 const ZeroBird = ({ Component, store, pageProps }) => {
     return (
@@ -37,8 +39,22 @@ ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전�
     console.log(context);
     const { ctx, Component } = context;
     let pageProps = {};
+    const state = ctx.store.getState();
+    const cookie = ctx.isServer ? ctx.req.headers.cookie : ''; // server에서만 ctx에 req값이 들어 있음!
+
+    if(ctx.isServer && cookie) { // SSR의 경우에만 쿠키를 직접 넣어준다. (CSR에서는 브라우저가 자동으로 넣어줌))
+        axios.defaults.headers.Cookie = cookie;
+        // axios.defaults => 한번 적용하면 모든 axios에 적용됨.
+    }
+
+    if(!state.user.me) {
+        ctx.store.dispatch({
+            type: LOAD_USER_REQUEST,
+        })
+    }    
+    
     if(Component.getInitialProps) {
-        pageProps = await context.Component.getInitialProps(ctx);
+        pageProps = await Component.getInitialProps(ctx);
     }
 
     return { pageProps }
