@@ -191,7 +191,7 @@ function* watchUnfollow() {
 
 // # 팔로우 목록 불러오기 관련 로직
 function loadFollowersAPI(userId) {
-    return axios.get(`/api/user/${userId}/followers`, {
+    return axios.get(`/api/user/${userId || 0}/followers`, {
         withCredentials: true
     })
 }
@@ -217,7 +217,7 @@ function* watchLoadFollowers() {
 
 // # 팔로잉 목록 불러오기 관련 로직
 function loadFollowingsAPI(userId) {
-    return axios.get(`/api/user/${userId}/followings`, {
+    return axios.get(`/api/user/${userId || 0}/followings`, {
         withCredentials: true
     })
 }
