@@ -7,21 +7,9 @@ import PostCard from '../components/PostCard';
 import { Card, Avatar } from 'antd';
 
 
-const User = ({ id }) => {
-    const dispatch = useDispatch();
+const User = () => {
     const { mainPosts } = useSelector(state => state.post)
     const { userInfo } = useSelector(state => state.user)
-    
-    useEffect(() => {
-        dispatch({
-            type: LOAD_USER_REQUEST,
-            data: id,
-        });
-        dispatch({
-            type: LOAD_USER_POSTS_REQUEST,
-            data: id
-        })
-    }, [])
     
     return (
         <>
@@ -68,8 +56,18 @@ User.propTypes = {
 
 // Component에 아래 메서드를 추가 => _app.js에서 파라미터 전달해줌
 User.getInitialProps = async (context) => { 
-    console.log(context.query.id);
-    return { id: parseInt(context.query.id, 10) } // User Component의 props로 전달
+    let id = parseInt(context.query.id, 10)
+
+    context.store.dispatch({
+        type: LOAD_USER_REQUEST,
+        data: id,
+    });
+    
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: id
+    })    
+    return { id } // User Component의 props로 전달
 }
 
 export default User

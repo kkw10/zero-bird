@@ -12,6 +12,7 @@ import sagaMiddleware from '../sagas/middleware';
 import rootSaga from '../sagas';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import axios from 'axios';
+import createSagaMiddleware from 'redux-saga';
 
 const ZeroBird = ({ Component, store, pageProps }) => {
     return (
@@ -61,7 +62,11 @@ ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전�
 }
 
 const configureStore = (initialState, options) => {
-    const middlewares = [sagaMiddleware];
+    const sagaMiddleware = createSagaMiddleware();
+    const middlewares = [sagaMiddleware, (store) => (next) => (action) => {
+        console.log(action);
+        next(action);
+    }];
     const enhancer = process.env.NODE_ENV === 'production' 
     ? compose(
         applyMiddleware(...middlewares)

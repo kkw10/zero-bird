@@ -143,7 +143,7 @@ function* watchLoadMainPosts() {
 
 // 해시태그 관련 로직
 function loadHashtagPostsAPI(tag) {
-    return axios.get(`/api/hashtag/${tag}`)
+    return axios.get(`/api/hashtag/${encodeURIComponent(tag)}`)
 }
 function* loadHashtagPosts(action) {
     try {
