@@ -2,14 +2,15 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PostImages from './PostImages';
 import Link from 'next/link';
-import { Button, Card, Icon, Avatar, Form, Input, List, Comment } from 'antd';
+import { Button, Card, Icon, Avatar, Form, Input, List, Comment, Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { 
     ADD_COMMENT_REQUEST,
     LOAD_COMMENTS_REQUEST, 
     UNLIKE_POST_REQUEST,
     LIKE_POST_REQUEST,
-    RETWEET_REQUEST
+    RETWEET_REQUEST,
+    REMOVE_POST_REQUEST
 } from '../reducers/post';
 import PostCardContent from './PostCardContent';
 import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
@@ -105,6 +106,13 @@ const PostCard = ({ value }) => {
         })
     }, [])
 
+    const onRemovePost = useCallback(userId => () => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: userId
+        })
+    }, [])
+
     return (
         <>
             <Card
@@ -115,7 +123,22 @@ const PostCard = ({ value }) => {
                     <Icon type="retweet" key="retweet" onClick={onRetweet} />,
                     <Icon type="heart" key="heart" theme={isLiked ? 'twoTone' : 'outlined'} twoToneColor="#eb2f96" onClick={ onToggleLike } />,
                     <Icon type="message" key="message" onClick={ onToggleComment } />,
-                    <Icon type="ellipsis" key="ellipsis" />,
+                    <Popover
+                        key="ellipsis"
+                        content={(
+                            <Button.Group>
+                                {me && value.UserId === me.id
+                                    ? (<>
+                                        <Button>수정</Button>
+                                        <Button type="danger" onClick={onRemovePost(value.id)} >삭제</Button>    
+                                    </>)
+                                    : <Button>신고</Button>
+                                }
+                            </Button.Group>
+                        )}
+                    >
+                        <Icon type="ellipsis" />
+                    </Popover>
                 ]}
                 title={ value.RetweetId ? `${value.User.nickname}님이 리트윗하셨습니다.` : null }
                 extra={!me || value.User.id === me.id

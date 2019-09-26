@@ -56,6 +56,7 @@ export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 // (RFS시리즈가 아닌 경우에는 "동기 요청"이므로 리덕스만 사용해도 된다.)
 
@@ -286,7 +287,17 @@ const reducer = (state = initialState, action) => {
                 isEditingNickname: false,
                 editNicknameErrorReason: action.error
             }
-        }         
+        }    
+        
+        case REMOVE_POST_OF_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: state.me.Posts.filter(v => v.id !== action.data)
+                }
+            }
+        }
         
         default: {
             return {

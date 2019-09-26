@@ -29,10 +29,16 @@ import {
     UNLIKE_POST_FAILURE,        
     RETWEET_REQUEST,
     RETWEET_SUCCESS,
-    RETWEET_FAILURE,        
+    RETWEET_FAILURE,    
+    REMOVE_POST_REQUEST,
+    REMOVE_POST_SUCCESS,
+    REMOVE_POST_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { 
+    ADD_POST_TO_ME,
+    REMOVE_POST_OF_ME 
+} from '../reducers/user';
 
 // 글쓰기 관련 로직
 function addPostAPI(postData) {
@@ -295,6 +301,36 @@ function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet)
 }
 
+// 포스트 삭제 관련 로직
+function removePostAPI(postId) {
+    return axios.delete(`/api/post/${postId}`, {
+        withCredentials: true
+    })
+}
+function* removePost(action) {
+    try {
+        const result = yield call(removePostAPI, action.data)
+        yield put({
+            type: REMOVE_POST_SUCCESS,
+            data: result.data
+        });
+
+        yield put({
+            type: REMOVE_POST_OF_ME,
+            data: result.data
+        })
+
+    } catch(e) {
+        yield put({
+            type: REMOVE_POST_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchRemovePost() {
+    yield takeLatest(REMOVE_POST_REQUEST, removePost)
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchLoadMainPosts),
@@ -306,6 +342,7 @@ export default function* postSaga() {
         fork(watchUploadImages),
         fork(watchLikePost),
         fork(watchUnlikePost),
-        fork(watchRetweet)
+        fork(watchRetweet),
+        fork(watchRemovePost)
     ])
 }
