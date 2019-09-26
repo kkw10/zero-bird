@@ -11,7 +11,9 @@ export const initialState = {
     followerList: [],
     userInfo: null,
     isEditingNickname: false,
-    editNicknameErrorReason: ''
+    editNicknameErrorReason: '',
+    hasMoreFollower: false,
+    hasMoreFollowing: false
 }
 
 // Action name (Request, Success, Failure => RSF시리즈는 "비동기 요청"의 경우 사용함 : 즉 리덕스 사가가 필요함)
@@ -208,13 +210,15 @@ const reducer = (state = initialState, action) => {
         // 팔로우 목록 불러오기 관련 로직
         case LOAD_FOLLOWERS_REQUEST: {
             return {
-                ...state
+                ...state,
+                hasMoreFollower: action.offset ? state.hasMoreFollower : true
             }
         }
         case LOAD_FOLLOWERS_SUCCESS: {
             return {
                 ...state,
-                followerList: state.followerList.concat(action.data)
+                followerList: state.followerList.concat(action.data),
+                hasMoreFollower: action.data.length === 3
             }
         }
         case LOAD_FOLLOWERS_FAILURE: {
@@ -226,13 +230,15 @@ const reducer = (state = initialState, action) => {
         // 팔로잉 목록 불러오기 관련 로직
         case LOAD_FOLLOWINGS_REQUEST: {
             return {
-                ...state
+                ...state,
+                hasMoreFollowing: action.offset ? state.hasMoreFollowing : true
             }
         }
         case LOAD_FOLLOWINGS_SUCCESS: {
             return {
                 ...state,
-                followingList: state.followingList.concat(action.data)
+                followingList: state.followingList.concat(action.data),
+                hasMoreFollowing: action.data.length === 3
             }
         }
         case LOAD_FOLLOWINGS_FAILURE: {
