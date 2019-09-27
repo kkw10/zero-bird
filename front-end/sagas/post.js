@@ -32,7 +32,10 @@ import {
     RETWEET_FAILURE,    
     REMOVE_POST_REQUEST,
     REMOVE_POST_SUCCESS,
-    REMOVE_POST_FAILURE,        
+    REMOVE_POST_FAILURE,   
+    LOAD_POST_REQUEST,
+    LOAD_POST_SUCCESS,
+    LOAD_POST_FAILURE,        
 } from '../reducers/post';
 import axios from 'axios';
 import { 
@@ -331,6 +334,30 @@ function* watchRemovePost() {
     yield takeLatest(REMOVE_POST_REQUEST, removePost)
 }
 
+// 개별 포스트 불러오기 관련 로직
+function loadPostAPI(postId) {
+    debugger;
+    return axios.get(`/api/post/${postId}`)
+}
+function* loadPost(action) {
+    try {
+        const result = yield call(loadPostAPI, action.data)
+        yield put({
+            type: LOAD_POST_SUCCESS,
+            data: result.data
+        });
+
+    } catch(e) {
+        yield put({
+            type: LOAD_POST_FAILURE,
+            error: e,
+        })
+    }
+}
+function* watchLoadPost() {
+    yield takeLatest(LOAD_POST_REQUEST, loadPost)
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchLoadMainPosts),
@@ -343,6 +370,7 @@ export default function* postSaga() {
         fork(watchLikePost),
         fork(watchUnlikePost),
         fork(watchRetweet),
-        fork(watchRemovePost)
+        fork(watchRemovePost),
+        fork(watchLoadPost)
     ])
 }
