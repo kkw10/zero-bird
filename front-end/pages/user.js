@@ -43,7 +43,7 @@ const User = () => {
             }
             <div>
                 {mainPosts.map(c => (
-                    <PostCard value={c} />
+                    <PostCard key={c.id} value={c} />
                 ))}
             </div>        
         </>

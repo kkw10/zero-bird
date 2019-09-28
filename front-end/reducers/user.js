@@ -195,10 +195,9 @@ const reducer = (state = initialState, action) => {
     
             // 팔로우 목록 불러오기 관련 로직
             case LOAD_FOLLOWERS_REQUEST: {
-                return {
-                    ...state,
-                    hasMoreFollower: action.offset ? state.hasMoreFollower : true
-                }
+                draft.followerList = !action.offset ? [] : draft.followerList;
+                draft.hasMoreFollower = action.offset ? draft.hasMoreFollower : true;
+                break;
             }
             case LOAD_FOLLOWERS_SUCCESS: {
                 return {
@@ -213,10 +212,9 @@ const reducer = (state = initialState, action) => {
             
             // 팔로잉 목록 불러오기 관련 로직
             case LOAD_FOLLOWINGS_REQUEST: {
-                return {
-                    ...state,
-                    hasMoreFollowing: action.offset ? state.hasMoreFollowing : true
-                }
+                draft.followingList = !action.offset ? [] : draft.followingList;
+                draft.hasMoreFollowing = action.offset ? draft.hasMoreFollowing : true;
+                break;
             }
             case LOAD_FOLLOWINGS_SUCCESS: {
                 return {

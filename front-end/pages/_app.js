@@ -70,7 +70,7 @@ ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전�
     }    
     
     if(Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx);
+        pageProps = await Component.getInitialProps(ctx) || {};
     }
 
     return { pageProps }

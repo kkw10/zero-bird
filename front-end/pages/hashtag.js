@@ -32,7 +32,7 @@ const Hashtag = ({ tag }) => { // _app.js에서 파라미터를 받아서 사용
     return (
         <div>
             {mainPosts.map(c => {
-                return <PostCard value={c} />
+                return <PostCard key={c.id} value={c} />
             })}
         </div>
     )
