@@ -52,7 +52,6 @@ ZeroBird.propTypes = {
 }
 
 ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전달용
-    console.log(context);
     const { ctx, Component } = context;
     let pageProps = {};
     const state = ctx.store.getState();
@@ -79,7 +78,6 @@ ZeroBird.getInitialProps = async (context) => { // 동적 url 파라미터 전�
 const configureStore = (initialState, options) => {
     const sagaMiddleware = createSagaMiddleware();
     const middlewares = [sagaMiddleware, (store) => (next) => (action) => {
-        console.log(action);
         next(action);
     }];
     const enhancer = process.env.NODE_ENV === 'production' 

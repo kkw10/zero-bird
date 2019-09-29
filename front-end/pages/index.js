@@ -34,6 +34,10 @@ const Home = () => {
 
     }, [mainPosts.length])
 
+    useEffect(() => {
+        console.log(me)
+    })
+
     return (
         <div>
             { me 
@@ -52,7 +56,6 @@ const Home = () => {
 
 // SSR
 Home.getInitialProps = async (context) => {
-    console.log(Object.keys(context));
     context.store.dispatch({
         type: LOAD_MAIN_POSTS_REQUEST,
     })
