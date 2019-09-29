@@ -3,7 +3,8 @@ const next = require('next');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const path = require('path');
 
 // 동적 URL을 위해서 express와 next를 연결한다. (next8은 동적 URL을 지원하지 않음)
 // 즉 next를 통해서 express를 돌리는 방법임.
@@ -20,6 +21,7 @@ dotenv.config();
 app.prepare().then(() => {
     const server = express();
     server.use(morgan('dev'));
+    server.use('/', express.static(path.join(__dirname, 'public')));
     server.use(express.json());
     server.use(express.urlencoded({ extended: true }))
     server.use(cookieParser(process.env.COOKIE_SECRET))

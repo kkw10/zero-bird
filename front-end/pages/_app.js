@@ -32,6 +32,7 @@ const ZeroBird = ({ Component, store, pageProps }) => {
                         {property: 'og:type', content: 'website'}
                     ]}
                     link={[
+                        {rel: 'shortcut icon', href: "/favicon.ico"},
                         {rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/antd/3.22.2/antd.min.css'},
                         {rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'},
                         {rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'}
